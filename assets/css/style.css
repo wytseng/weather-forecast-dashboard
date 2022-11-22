@@ -1,0 +1,61 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+p {
+  margin-bottom: 0.5em;
+}
+
+/* HEADER  */
+
+.navbar {
+  background: linear-gradient(150deg, #0C2C52, #5F6B61, #5E9DC8);
+  padding: 0.8em;
+}
+
+.navbar-brand {
+  font-size: 1.2em;
+}
+
+/* SEARCH & NAVIGATION */
+
+h2 {
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+input.search-city {
+  border: 3px solid #ced4da;
+}
+
+.searchBtn {
+  background: linear-gradient(150deg, #0C2C52, #5F6B61, #5E9DC8);
+  color: white;
+}
+
+hr {
+  border: 0;
+  border-top: 2px solid #5F6B61;
+  opacity: 75%;
+}
+
+/* DASHBOARD */
+
+.weather-today {
+  background-color: rgba(0,0,0,0.05);
+}
+
+.city-name {
+  margin-bottom: 1em;
+}
+
+.five-day-card {
+  width: 20%;
+}
+
+.card {
+  border: 2px solid #0C2C52;
+  background-color: #0C2C52;
+  color: white;
+  padding: 5px;
+}
