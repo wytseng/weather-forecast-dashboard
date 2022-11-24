@@ -20,10 +20,10 @@ var searchHistory = [];
 dayjs.extend(window.dayjs_plugin_utc);
 
 // Renders today's weather to the according section
-function renderWeather(cityName, data) {;
+function renderCurrentWeather(cityName, data) {;
   let weatherData = data.list[0];
   // Get time local to the searched city to display the correct date for the city
-  let localTime = convertTimezone(data.city.timezone, weatherData.dt);
+  let localDate = convertTimezone(data.city.timezone, dayjs().unix());
 
   // Create document elements 
   let tempEl = document.createElement('p');
@@ -37,7 +37,7 @@ function renderWeather(cityName, data) {;
   weatherIconEl.setAttribute('class', 'weather-icon');
 
   // Input data to respective dom elements
-  cityEl.textContent = `${cityName} (${localTime.format('MM/DD/YYYY')})`;
+  cityEl.textContent = `${cityName} (${localDate.format('MM/DD/YYYY')})`;
   tempEl.textContent = `Temp: ${weatherData.main.temp}°F`
   windEl.textContent = `Wind: ${weatherData.wind.speed} MPH`
   humidEl.textContent = `Humidity: ${weatherData.main.humidity}%`
@@ -52,13 +52,10 @@ function renderWeather(cityName, data) {;
 
 // Render 5-day forecast in the forecast section
 function renderForecast(data) {
-  // Covert UTC to city local time to get the correct date 
+  // Covert UTC to city local time to get the correct start and end date
   let timezone = data.city.timezone
-  let startDateLocal = convertTimezone(timezone, data.list[0].dt).add(1,'day').startOf('day');
-  let endDateLocal = startDateLocal.add(5,'day').startOf('day');
-  // Convert start and end date back to utc time in order to compare with database
-  let startDateUtc = startDateLocal.utc().unix();
-  let endDateUtc = endDateLocal.utc().unix();
+  let startDate = convertTimezone(timezone, dayjs().add(1,'day').unix()).startOf('day').unix();
+  let endDate = dayjs.unix(startDate).add(5,'day').startOf('day').unix();
 
   // Clear previous render 
   displayForecastEl.innerHTML = '';
@@ -67,7 +64,7 @@ function renderForecast(data) {
   for (let i = 0; i < data.list.length; i++) {
     let forecastData = data.list[i];
     // Check if within the needed timeframe
-    if (startDateUtc <= forecastData.dt && forecastData.dt <= endDateUtc) {
+    if (startDate <= forecastData.dt && forecastData.dt <= endDate) {
       // Get the forecast at local time around noon 
       let localHour = convertTimezone(timezone, forecastData.dt).get('hour');
       if (11 <= localHour && localHour <= 13) {
@@ -134,7 +131,7 @@ function fetchWeather(cityInfo) {
     fetch(forecastUrl).then(function(response) {
       return response.json();
     }).then(function(data) {
-      renderWeather(cityInfo.name, data);
+      renderCurrentWeather(cityInfo.name, data);
       renderForecast(data);
       // Toggle dashboard board visible after all information loaded
       dashboardEl.classList.remove('invisible');
