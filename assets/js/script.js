@@ -94,7 +94,7 @@ function renderForecastCard(timezone, forecastData) {
   weatherIconEl.setAttribute('src', `https://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`);
   weatherIconEl.setAttribute('class', 'weather-icon ml-1');
 
-  cardEl.setAttribute('class','col-lg col-md-4 mb-4');
+  cardEl.setAttribute('class','col-lg col-md-4 col-sm-6 mb-4');
   cardBodyEl.setAttribute('class', 'card-body p-2 rounded');
 
   dateEl.textContent = convertTimezone(timezone, forecastData.dt).format('MM/DD/YYYY');
@@ -182,12 +182,15 @@ function renderSearchHistory() {
       // Get searched city without space to use as id
       let cityId = searchHistory[i].replaceAll(' ','-');
       // Create button with seached city name as button name
+      let btnContainer = document.createElement('div');
       let historyBtn = document.createElement('button');
-      historyBtn.setAttribute('class', 'btn history-btn mb-2');
+      btnContainer.setAttribute('class', 'col-md-12 col-sm-6 col-12')
+      historyBtn.setAttribute('class', 'btn history-btn col-12');
       historyBtn.setAttribute('id', `history-${cityId}`);
       historyBtn.textContent = searchHistory[i];
       // Display button
-      searchHistoryEl.append(historyBtn);
+      btnContainer.append(historyBtn);
+      searchHistoryEl.append(btnContainer);
     }
     // Show a button to clear search history if it is not empty
     clearBtn.classList.remove('invisible');
