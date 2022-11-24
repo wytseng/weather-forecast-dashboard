@@ -68,56 +68,44 @@ function renderForecast(data) {
       // Get the forecast at local time around noon 
       let localHour = convertTimezone(timezone, forecastData.dt).get('hour');
       if (11 <= localHour && localHour <= 13) {
-        // Create dom elements
-        let cardEl = document.createElement('div');
-        let cardBodyEl = document.createElement('div');
-        let dateEl = document.createElement('h5');
-        let tempEl = document.createElement('p');
-        let windEl = document.createElement('p');
-        let humidEl = document.createElement('p');
-        let weatherIconEl = document.createElement('img');
-
-        // Input data and style dom elements
-        weatherIconEl.setAttribute('alt',forecastData.weather[0].description);
-        weatherIconEl.setAttribute('src', `https://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`);
-        weatherIconEl.setAttribute('class', 'weather-icon ml-1');
-
-        cardEl.setAttribute('class','col-lg col-md-4 mb-4');
-        cardBodyEl.setAttribute('class', 'card-body p-2 rounded');
-
-        dateEl.textContent = convertTimezone(timezone, forecastData.dt).format('MM/DD/YYYY');
-        tempEl.textContent = `Temp: ${forecastData.main.temp}°F`;
-        windEl.textContent = `Wind: ${forecastData.wind.speed} MPH`;
-        humidEl.textContent = `Humidity: ${forecastData.main.humidity}%`;
-        
-        // Render information to page
-        cardBodyEl.append(weatherIconEl, dateEl, tempEl, windEl, humidEl);
-        cardEl.append(cardBodyEl);
-        displayForecastEl.append(cardEl);
+        // Render forecast cards for each that satisfies the conditions
+        renderForecastCard(timezone, forecastData);
       }
     }
   }
-
-  // If in the 3hr gap where the fifth day forecast has not yet been generated, 
-  // display placeholder card to let user know
+  // If there is only 4 cards so far (since we are using noon forecast), then take the lastest forecast
   if (displayForecastEl.childElementCount === 4) {
-    let cardEl = document.createElement('div');
-    let cardBodyEl = document.createElement('div');
-    let titleEl = document.createElement('h5');
-    let descEl = document.createElement('p');
-
-    cardEl.setAttribute('class','col-lg col-md-4 mb-4');
-    cardBodyEl.setAttribute('class', 'card-body p-2 rounded');
-    titleEl.setAttribute('class', 'pt-2')
-    descEl.setAttribute('class', 'pt-2')
-    titleEl.textContent = "Forecast not ready yet."
-    descEl.textContent = "It is before 3AM local time. Currently working on a forecast..";
-
-    cardBodyEl.append(titleEl, descEl);
-    cardEl.append(cardBodyEl);
-    displayForecastEl.append(cardEl);
+    renderForecastCard(timezone, data.list[data.list.length-1]);
   }
+}
 
+function renderForecastCard(timezone, forecastData) {
+  // Create dom elements
+  let cardEl = document.createElement('div');
+  let cardBodyEl = document.createElement('div');
+  let dateEl = document.createElement('h5');
+  let tempEl = document.createElement('p');
+  let windEl = document.createElement('p');
+  let humidEl = document.createElement('p');
+  let weatherIconEl = document.createElement('img');
+
+  // Input data and style dom elements
+  weatherIconEl.setAttribute('alt',forecastData.weather[0].description);
+  weatherIconEl.setAttribute('src', `https://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`);
+  weatherIconEl.setAttribute('class', 'weather-icon ml-1');
+
+  cardEl.setAttribute('class','col-lg col-md-4 mb-4');
+  cardBodyEl.setAttribute('class', 'card-body p-2 rounded');
+
+  dateEl.textContent = convertTimezone(timezone, forecastData.dt).format('MM/DD/YYYY');
+  tempEl.textContent = `Temp: ${forecastData.main.temp}°F`;
+  windEl.textContent = `Wind: ${forecastData.wind.speed} MPH`;
+  humidEl.textContent = `Humidity: ${forecastData.main.humidity}%`;
+  
+  // Render information to page
+  cardBodyEl.append(weatherIconEl, dateEl, tempEl, windEl, humidEl);
+  cardEl.append(cardBodyEl);
+  displayForecastEl.append(cardEl);
 }
 
 // Converts UTC time to search city local time and returns local time
