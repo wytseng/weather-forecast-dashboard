@@ -28,10 +28,32 @@ input.search-city {
   border: 3px solid #ced4da;
 }
 
+.search-form {
+  padding-right: calc(var(--bs-gutter-x) * .5);
+  padding-left: calc(var(--bs-gutter-x) * .5);
+}
+
 .search-btn {
   background: linear-gradient(150deg, #0C2C52, #5F6B61, #5E9DC8);
   color: white;
 }
+
+.search-btn:hover {
+  color: white;
+  filter: grayscale(2.0);
+}
+
+.history-btn {
+  background-color: #0C2C52;
+  color: white;
+  width: 100%;
+}
+
+.history-btn:hover {
+  color: white;
+  background-color: #5E9DC8;
+}
+
 
 hr {
   border: 0;

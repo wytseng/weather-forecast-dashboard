@@ -9,13 +9,17 @@ var displayForecastEl = document.getElementById('forecast-cards');
 
 var searchCityEl = document.getElementById('search-city');
 var searchForm = document.getElementById('search-form');
+var searchHistoryEl = document.getElementById('search-history');
+var dashboardEl = document.getElementById('dashboard');
+
+// Declare empty search history array
+var searchHistory = [];
 
 // Implement dayjs utc plugin
 dayjs.extend(window.dayjs_plugin_utc);
 
 // Renders today's weather to the according section
-function renderWeather(data) {
-  let cityName = data.city.name;
+function renderWeather(cityName, data) {;
   let weatherData = data.list[0];
   // Get time local to the searched city to display the correct date for the city
   let localTime = convertTimezone(data.city.timezone, weatherData.dt);
@@ -103,17 +107,18 @@ function convertTimezone(timezone, unixTime) {
 }
 
 // Fetches weather forecast and calls on render functions
-function fetchWeather(data) {
-  var forecastUrl = `${weatherUrl}data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&units=imperial&appid=${weatherApiId}`;
+function fetchWeather(cityInfo) {
+  var forecastUrl = `${weatherUrl}data/2.5/forecast?lat=${cityInfo.lat}&lon=${cityInfo.lon}&units=imperial&appid=${weatherApiId}`;
     fetch(forecastUrl).then(function(response) {
       return response.json();
     }).then(function(data) {
-      renderWeather(data);
+      renderWeather(cityInfo.name, data);
       renderForecast(data);
+      dashboardEl.classList.remove('invisible');
       
     }).catch(function(error) {
       console.error(error);
-    });
+    })
 }
 
 // Returns given city coordinates 
@@ -124,15 +129,18 @@ function fetchCoords(cityName) {
     return response.json();
   }).then(function(data) {
     if (!data[0]) {
+      // Alerts user if input unfound
       alert("Location not found");
     } else {
-      fetchWeather(data);
+      addToHistory(cityName);
+      fetchWeather(data[0]);
     }
   }).catch(function(error) {
     console.error(err);
   });
 }
 
+// Searchs for the city entered in the input upon submission, does nothing if empty
 function searchCity(event) {
   event.preventDefault();
   let cityName = searchCityEl.value.trim();
@@ -142,7 +150,43 @@ function searchCity(event) {
   }
 }
 
+// Displays buttons for each search history item
+function renderSearchHistory() {
+  // Only proceed if not part of history already
+  if (searchHistory.length !== 0) {
+    // Clear container to render new information
+    searchHistoryEl.innerHTML = '';
+    for (let i=0; i < searchHistory.length; i++) {
+      // Get searched city without space to use as id
+      let cityId = searchHistory[i].replaceAll(' ','-');
+      // Create button with seached city name as button name
+      let historyBtn = document.createElement('button');
+      historyBtn.setAttribute('class', 'btn history-btn mb-2');
+      historyBtn.setAttribute('id', `history-${cityId}`);
+      historyBtn.textContent = searchHistory[i];
+      // Display button
+      searchHistoryEl.append(historyBtn);
+    }
+  }
+}
 
+// Add search to history
+function addToHistory(searchCity) {
+  // Check if the 
+   if (searchHistory.indexOf(searchCity.toLowerCase()) === -1) {
+      searchHistory.push(searchCity.toLowerCase());
+      console.log(searchHistory);
+      localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+      renderSearchHistory();
+   }
+}
+
+function initSearchHistory() {
+  searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+  renderSearchHistory();
+}
+
+initSearchHistory();
 searchForm.addEventListener('submit', searchCity);
 
 
