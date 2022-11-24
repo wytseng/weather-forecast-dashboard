@@ -13,41 +13,42 @@
   </head>
 
   <body>
-
+    <!-- NON-INTERACTIVE NAVBAR -->
     <nav class="navbar navbar-expand-lg">
       <div class="container-md justify-content-center">
         <h2><a class="navbar-brand text-light" href="#">Weather Forecast Dashboard</a></h2>
       </div>
     </nav>  
 
-    <main class="mt-4">
-      <div class="container-fluid pt-2">
-        <div class="row ps-3">
-          <aside class="col-md-3 navigation">
-            <form id="search-form" class="search-form row gy-2">
-              <h2 for="search-city" class="form-label ps-0">Search for a city: </h2>
-              <input type="text" class="form-control search-city" id="search-city" placeholder="Search for a city" />
-              <button type="submit" class="btn search-btn" id="search-btn">Search</button>
-            </form>
-            <hr/>
-            <!-- Display cities from search history -->
-            <div class="search-history" id="search-history">  
-            </div>
-            <button class="btn clear-btn mt-3 invisible" id="clear-btn">Clear History</button>
-          </aside>
-          <div class="col-md-9 invisible" id="dashboard">
-            <section class="p-4 mb-4 rounded weather-today">
-              <h3 class="city-name d-flex align-items-center" id="city-name"></h3>
-              <div id="forecast-today"></div>
-            </section>
-            <section class="row p-2 weather-forecast">
-              <div class="col-12">
-                <h4>5-Day Forecast: </h4>
-              </div>
-              <div class="row gx-2" id="forecast-cards">
-              </div>
-            </section>
+    <main class="container-fluid pt-2 mt-4">
+      <div class="row ps-3">
+        <!-- SEARCH BAR & SEARCH HISTORY -->
+        <aside class="col-md-3 navigation">
+          <form id="search-form" class="search-form row gy-2">
+            <h2 for="search-city" class="form-label ps-0">Search for a city: </h2>
+            <input type="text" class="form-control search-city" id="search-city" placeholder="Search for a city" />
+            <button type="submit" class="btn search-btn" id="search-btn">Search</button>
+          </form>
+          <hr/>
+          <!-- Display cities from search history -->
+          <div class="search-history" id="search-history">  
           </div>
+          <button class="btn clear-btn mt-3 invisible" id="clear-btn">Clear History</button>
+        </aside>
+        <div class="col-md-9 invisible" id="dashboard">
+          <!-- WEATHER FORECAST TODAY -->
+          <section class="p-4 mb-4 rounded weather-today">
+            <h3 class="city-name d-flex align-items-center" id="city-name"></h3>
+            <div id="forecast-today"></div>
+          </section>
+          <!-- 5 DAY WEATHER FORECAST -->
+          <section class="row p-2 weather-forecast">
+            <div class="col-12">
+              <h4>5-Day Forecast: </h4>
+            </div>
+            <div class="row gx-2 forecast-cards" id="forecast-cards">
+            </div>
+          </section>
         </div>
       </div>
     </main>

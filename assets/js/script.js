@@ -60,8 +60,6 @@ function renderForecast(data) {
   let startDateUtc = startDateLocal.utc().unix();
   let endDateUtc = endDateLocal.utc().unix();
 
-  console.log(convertTimezone(timezone,dayjs().unix()).format());
-
   // Clear previous render 
   displayForecastEl.innerHTML = '';
 
@@ -102,6 +100,27 @@ function renderForecast(data) {
       }
     }
   }
+
+  // If in the 3hr gap where the fifth day forecast has not yet been generated, 
+  // display placeholder card to let user know
+  if (displayForecastEl.childElementCount === 4) {
+    let cardEl = document.createElement('div');
+    let cardBodyEl = document.createElement('div');
+    let titleEl = document.createElement('h5');
+    let descEl = document.createElement('p');
+
+    cardEl.setAttribute('class','col-lg col-md-4 mb-4');
+    cardBodyEl.setAttribute('class', 'card-body p-2 rounded');
+    titleEl.setAttribute('class', 'pt-2')
+    descEl.setAttribute('class', 'pt-2')
+    titleEl.textContent = "Forecast not ready yet."
+    descEl.textContent = "It is before 3AM local time. Currently working on a forecast..";
+
+    cardBodyEl.append(titleEl, descEl);
+    cardEl.append(cardBodyEl);
+    displayForecastEl.append(cardEl);
+  }
+
 }
 
 // Converts UTC time to search city local time and returns local time
