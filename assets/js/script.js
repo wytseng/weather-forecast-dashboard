@@ -10,6 +10,7 @@ var displayForecastEl = document.getElementById('forecast-cards');
 var searchCityEl = document.getElementById('search-city');
 var searchForm = document.getElementById('search-form');
 var searchHistoryEl = document.getElementById('search-history');
+var clearBtn = document.getElementById('clear-btn');
 var dashboardEl = document.getElementById('dashboard');
 
 // Declare empty search history array
@@ -37,7 +38,7 @@ function renderWeather(cityName, data) {;
 
   // Input data to respective dom elements
   cityEl.textContent = `${cityName} (${localTime.format('MM/DD/YYYY')})`;
-  tempEl.textContent = `Temperature: ${weatherData.main.temp}°F`
+  tempEl.textContent = `Temp: ${weatherData.main.temp}°F`
   windEl.textContent = `Wind: ${weatherData.wind.speed} MPH`
   humidEl.textContent = `Humidity: ${weatherData.main.humidity}%`
 
@@ -53,20 +54,22 @@ function renderWeather(cityName, data) {;
 function renderForecast(data) {
   // Covert UTC to city local time to get the correct date 
   let timezone = data.city.timezone
-  let startDateLocal = convertTimezone(timezone, data.list[0].dt).add(5,'day').startOf('day');
+  let startDateLocal = convertTimezone(timezone, data.list[0].dt).add(1,'day').startOf('day');
   let endDateLocal = startDateLocal.add(5,'day').startOf('day');
   // Convert start and end date back to utc time in order to compare with database
   let startDateUtc = startDateLocal.utc().unix();
   let endDateUtc = endDateLocal.utc().unix();
+
+  console.log(convertTimezone(timezone,dayjs().unix()).format());
 
   // Clear previous render 
   displayForecastEl.innerHTML = '';
 
   // Interate through all the forecast data
   for (let i = 0; i < data.list.length; i++) {
+    let forecastData = data.list[i];
     // Check if within the needed timeframe
-    if (startDateUtc <= data.list[i].dt < endDateUtc) {
-      let forecastData = data.list[i];
+    if (startDateUtc <= forecastData.dt && forecastData.dt <= endDateUtc) {
       // Get the forecast at local time around noon 
       let localHour = convertTimezone(timezone, forecastData.dt).get('hour');
       if (11 <= localHour && localHour <= 13) {
@@ -82,13 +85,13 @@ function renderForecast(data) {
         // Input data and style dom elements
         weatherIconEl.setAttribute('alt',forecastData.weather[0].description);
         weatherIconEl.setAttribute('src', `https://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`);
-        weatherIconEl.setAttribute('class', 'weather-icon mx-auto');
+        weatherIconEl.setAttribute('class', 'weather-icon ml-1');
 
         cardEl.setAttribute('class','col-lg col-md-4 mb-4');
         cardBodyEl.setAttribute('class', 'card-body p-2 rounded');
 
         dateEl.textContent = convertTimezone(timezone, forecastData.dt).format('MM/DD/YYYY');
-        tempEl.textContent = `Temperature: ${forecastData.main.temp}°F`;
+        tempEl.textContent = `Temp: ${forecastData.main.temp}°F`;
         windEl.textContent = `Wind: ${forecastData.wind.speed} MPH`;
         humidEl.textContent = `Humidity: ${forecastData.main.humidity}%`;
         
@@ -114,8 +117,8 @@ function fetchWeather(cityInfo) {
     }).then(function(data) {
       renderWeather(cityInfo.name, data);
       renderForecast(data);
+      // Toggle dashboard board visible after all information loaded
       dashboardEl.classList.remove('invisible');
-      
     }).catch(function(error) {
       console.error(error);
     })
@@ -132,6 +135,7 @@ function fetchCoords(cityName) {
       // Alerts user if input unfound
       alert("Location not found");
     } else {
+      // Save city to search history and fetch for weather data with the first city that showed up
       addToHistory(cityName);
       fetchWeather(data[0]);
     }
@@ -140,22 +144,36 @@ function fetchCoords(cityName) {
   });
 }
 
-// Searchs for the city entered in the input upon submission, does nothing if empty
+// Searchs for the city entered upon submission
 function searchCity(event) {
   event.preventDefault();
   let cityName = searchCityEl.value.trim();
   if (cityName !== '') {
     fetchCoords(cityName);
     searchCityEl.value = '';
+  } else {
+    // If search term is empty, hide dashboard
+    dashboardEl.classList.add('invisible');
   }
+}
+
+// Render weather dasboard when a search history button is clicked 
+function renderHistoryCity(event) {
+  // Check if element clicked is a search history button
+  if (event.target.className.includes('history-btn')) {
+    let searchCity = event.target.id;
+    searchCity = searchCity.substring(searchCity.indexOf('-')+1).replaceAll('-', ' ');
+    fetchCoords(searchCity);
+  }
+
 }
 
 // Displays buttons for each search history item
 function renderSearchHistory() {
+  searchHistoryEl.innerHTML = '';
   // Only proceed if not part of history already
   if (searchHistory.length !== 0) {
     // Clear container to render new information
-    searchHistoryEl.innerHTML = '';
     for (let i=0; i < searchHistory.length; i++) {
       // Get searched city without space to use as id
       let cityId = searchHistory[i].replaceAll(' ','-');
@@ -167,20 +185,32 @@ function renderSearchHistory() {
       // Display button
       searchHistoryEl.append(historyBtn);
     }
-  }
+    // Show a button to clear search history if it is not empty
+    clearBtn.classList.remove('invisible');
+  } 
 }
 
 // Add search to history
 function addToHistory(searchCity) {
-  // Check if the 
+  // Check if the city is already stored in search history
    if (searchHistory.indexOf(searchCity.toLowerCase()) === -1) {
       searchHistory.push(searchCity.toLowerCase());
-      console.log(searchHistory);
       localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
       renderSearchHistory();
    }
 }
 
+// Clears local storage search history
+function clearHistory() {
+  localStorage.removeItem('searchHistory');
+  searchHistory = [];
+  renderSearchHistory();
+  // Remove clear search history button and clear dashboard
+  clearBtn.classList.add('invisible')
+  dashboardEl.innerHTML = '';
+}
+
+// Loads and displays search history from local storage
 function initSearchHistory() {
   searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
   renderSearchHistory();
@@ -188,6 +218,7 @@ function initSearchHistory() {
 
 initSearchHistory();
 searchForm.addEventListener('submit', searchCity);
-
+searchHistoryEl.addEventListener('click', renderHistoryCity);
+clearBtn.addEventListener('click', clearHistory);
 
 

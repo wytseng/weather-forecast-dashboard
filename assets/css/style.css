@@ -54,6 +54,12 @@ input.search-city {
   background-color: #5E9DC8;
 }
 
+.clear-btn {
+  color: white;
+  width: 100%;
+  background: linear-gradient(150deg, #5F6B61, #ef476f);
+  align-self: flex-end;
+}
 
 hr {
   border: 0;
