@@ -21,6 +21,8 @@ When an incorrect city name is entered, a window alert will notify the user and 
 Once an existing city is found, a dashboard will appear to the right of the search bar. The top section of the dashboard displays the current weather, while the bottom section displays the weather forecast for the next 5 days. Forecasts for each day includes information on the date, temperature, wind speed, humidity, along with a little weather icon to visualize the overall weather. 
 ![working weather dashboard](assets/images/working-dashboard.png)
 Additionally, note that all the succesfully search histories are display underneath the search bar along with a clear history button. Clicking on a search history will update the dashboard accordingly. The search history will stay on the site after refresh. Meawhile, clicking on the "clear history" button will clear you search history, removing all the content below the search bar. 
+![working weather dashboard](assets/images/mobile-view.png)
+The app is also responsive to multiple platforms
 
 Forecast data: the displayed forecast is based on the noon (12:00) forecast for each day, with exceptions to the current and last day forecast. The current day forecast uses the weather forecast closes to current time. Likewise, if the noon forecast hasn't been released for the last day, the last forecast (most distanced in time) will be used instead. 
 
