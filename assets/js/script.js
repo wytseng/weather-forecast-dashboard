@@ -5,7 +5,10 @@ var weatherApiId = "c276d907c17ef1ab60dbfff32e1fcf8d";
 // Get document elements
 var cityEl = document.getElementById('city-name');
 var forecastTodayEl = document.getElementById('forecast-today');
-let displayForecastEl = document.getElementById('forecast-cards');
+var displayForecastEl = document.getElementById('forecast-cards');
+
+var searchCityEl = document.getElementById('search-city');
+var searchForm = document.getElementById('search-form');
 
 // Implement dayjs utc plugin
 dayjs.extend(window.dayjs_plugin_utc);
@@ -33,6 +36,10 @@ function renderWeather(data) {
   tempEl.textContent = `Temperature: ${weatherData.main.temp}°F`
   windEl.textContent = `Wind: ${weatherData.wind.speed} MPH`
   humidEl.textContent = `Humidity: ${weatherData.main.humidity}%`
+
+  // Clear previous render
+  weatherIconEl.innerHTML = '';
+  forecastTodayEl.innerHTML='';
   // Render information on page
   cityEl.append(weatherIconEl)
   forecastTodayEl.append(tempEl, windEl, humidEl);
@@ -47,6 +54,9 @@ function renderForecast(data) {
   // Convert start and end date back to utc time in order to compare with database
   let startDateUtc = startDateLocal.utc().unix();
   let endDateUtc = endDateLocal.utc().unix();
+
+  // Clear previous render 
+  displayForecastEl.innerHTML = '';
 
   // Interate through all the forecast data
   for (let i = 0; i < data.list.length; i++) {
@@ -123,6 +133,17 @@ function fetchCoords(cityName) {
   });
 }
 
-fetchCoords("shanghai");
+function searchCity(event) {
+  event.preventDefault();
+  let cityName = searchCityEl.value.trim();
+  if (cityName !== '') {
+    fetchCoords(cityName);
+    searchCityEl.value = '';
+  }
+}
+
+
+searchForm.addEventListener('submit', searchCity);
+
 
 

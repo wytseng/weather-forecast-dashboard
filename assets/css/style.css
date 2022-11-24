@@ -28,7 +28,7 @@ input.search-city {
   border: 3px solid #ced4da;
 }
 
-.searchBtn {
+.search-btn {
   background: linear-gradient(150deg, #0C2C52, #5F6B61, #5E9DC8);
   color: white;
 }
