@@ -53,9 +53,8 @@ hr {
   width: 20%;
 }
 
-.card {
+.card-body {
   border: 2px solid #0C2C52;
   background-color: #0C2C52;
   color: white;
-  padding: 5px;
 }

@@ -23,7 +23,7 @@
     <main>
       <div class="container-fluid pt-2">
         <div class="row ps-3">
-          <aside class="col-3 navigation">
+          <aside class="col-md-3 navigation">
             <form class="row gy-2">
               <h2 for="search-city" class="form-label ps-0">Search for a city: </h2>
               <input type="text" class="form-control search-city" id="search-city" />
@@ -34,58 +34,16 @@
             <div class="search-history" id="search-history">              
             </div>
           </aside>
-          <div class="col-9 dashboard">
+          <div class="col-md-9 dashboard">
             <section class="p-4 mb-4 rounded weather-today">
-              <h3 class="city-name d-flex align-items-center" id="city-name">
-              </h3>
-              <div id="forecast-today">
-              </div>
+              <h3 class="city-name d-flex align-items-center" id="city-name"></h3>
+              <div id="forecast-today"></div>
             </section>
             <section class="row p-2 weather-forecast">
               <div class="col-12">
                 <h4>5-Day Forecast: </h4>
               </div>
-              <div class="row gx-3">
-                <div class="col-md mb-4 rounded five-day-card">
-                  <div class="card">
-                    <h5>(date)</h5>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
-                  </div>
-                </div>
-                <div class="col-md mb-4 rounded five-day-card">
-                  <div class="card">
-                    <h5>(date)</h5>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
-                  </div>
-                </div>
-                <div class="col-md mb-4 rounded five-day-card">
-                  <div class="card">
-                    <h5>(date)</h5>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
-                  </div>
-                </div>
-                <div class="col-md mb-4 rounded five-day-card">
-                  <div class="card">
-                    <h5>(date)</h5>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
-                  </div>
-                </div>
-                <div class="col-md mb-4 rounded five-day-card">
-                  <div class="card">
-                    <h5>(date)</h5>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
-                  </div>
-                </div>
+              <div class="row gx-2" id="forecast-cards">
               </div>
             </section>
           </div>
