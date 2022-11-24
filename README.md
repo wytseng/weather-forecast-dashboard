@@ -17,16 +17,13 @@ Here is the link to the working website: https://wytseng.github.io/weather-forec
 The home page is very minimalistic. It only shows a search bar along with a search button, prompting users to enter a city name. 
 ![landing page](assets/images/home.png)
 When an incorrect city name is entered, a window alert will notify the user and allow them to continue entering a city name until the page can find one matching the input. 
+![city not found](assets/images/city-not-found.png)
+Once an existing city is found, a dashboard will appear to the right of the search bar. The top section of the dashboard displays the current weather, while the bottom section displays the weather forecast for the next 5 days. Forecasts for each day includes information on the date, temperature, wind speed, humidity, along with a little weather icon to visualize the overall weather. 
+![working weather dashboard](assets/images/working-dashboard.png)
+Additionally, note that all the succesfully search histories are display underneath the search bar along with a clear history button. Clicking on a search history will update the dashboard accordingly. The search history will stay on the site after refresh. Meawhile, clicking on the "clear history" button will clear you search history, removing all the content below the search bar. 
 
-Once an existing city is found, a dashboard will appear to the right of the search bar. The top section of the dashboard displays the current weather, while the bottom section displays the weather forecast for the next 5 days. 
+Forecast data: the displayed forecast is based on the noon (12:00) forecast for each day, with exceptions to the current and last day forecast. The current day forecast uses the weather forecast closes to current time. Likewise, if the noon forecast hasn't been released for the last day, the last forecast (most distanced in time) will be used instead. 
 
-Provide instructions and examples for use. Include screenshots as needed.
-
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
-
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
 
 ## Credits
 
@@ -38,7 +35,3 @@ Third-party APIs:
 ## License
 
 MIT License
-
-## Tests
-
-Go the extra mile and write tests for your application
